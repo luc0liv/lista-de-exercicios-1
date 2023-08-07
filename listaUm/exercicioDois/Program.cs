@@ -17,7 +17,7 @@ namespace exercicioDois
             Console.WriteLine("Digite seu salário por hora");
             bool salaryParse = decimal.TryParse(Console.ReadLine(),out decimal salary);
 
-            decimal regularHours = 40 * 4;
+            int regularHours = 40 * 4;
             double totalSalary = 0;
 
             if (hoursWorked <= regularHours)
