@@ -4,9 +4,6 @@
 //• Realizar uma entrada no estoque e mostrar novamente os dados do produto
 //• Realizar uma saída no estoque e mostrar novamente os dados do produto.
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace ExercicioEstoque
 {
     class Program
@@ -26,28 +23,52 @@ namespace ExercicioEstoque
                 Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
                 Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
 
-                Console.WriteLine("Deseja adicionar ou remover produtos?");
-                Console.WriteLine("1 - Adicionar");
-                Console.WriteLine("2 - Remover");
-                bool optionParse = int.TryParse(Console.ReadLine(), out int option);
-
-                Console.WriteLine($"Digite a quantidade que deseja {(option == 1 ? "adicionar" : "remover") }");
-                bool quantParse = int.TryParse(Console.ReadLine(), out int quant);
-                if (option == 1 ) {
-                    product.AdicionarAoEstoque(quant);
-                }
-                else
+                bool isOn = true;
+                while (isOn)
                 {
-                    product.RemoverDoEstoque(quant);
+                    Console.WriteLine("Deseja adicionar ou remover produtos?");
+                    Console.WriteLine("1 - Adicionar");
+                    Console.WriteLine("2 - Remover");
+                    Console.WriteLine("0 - Sair");
+                    bool optionParse = int.TryParse(Console.ReadLine(), out int option);
+
+                    if (!optionParse || option < 0 || option > 2)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        int quant = 0;
+                        if (option == 0)
+                        {
+                            isOn = false;
+                            break;
+                        }
+                        else if (option == 1)
+                        {
+
+                            Console.WriteLine($"Digite a quantidade a adicionar");
+                            bool quantParse = int.TryParse(Console.ReadLine(), out quant);
+                            product.AdicionarAoEstoque(quant);
+                        }
+                        else if (option == 2)
+                        {
+                            Console.WriteLine($"Digite a quantidade a remover");
+                            bool quantParse = int.TryParse(Console.ReadLine(), out quant);
+                            product.RemoverDoEstoque(quant);
+                        }
+
+                        Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
+                        Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
+                    }
+
                 }
 
-                Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
-                Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
-
-            } catch (Exception error) 
+            }
+            catch (Exception error)
             {
                 Console.WriteLine(error.Message);
-            } 
+            }
             finally
             {
                 Console.ReadKey();
