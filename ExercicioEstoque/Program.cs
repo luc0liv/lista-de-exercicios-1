@@ -1,8 +1,4 @@
-﻿//Fazer um programa para ler os dados de um produto em estoque (nome, preço e quantidade no estoque).
-//Em seguida:
-//• Mostrar os dados do produto (nome, preço, quantidade no estoque, valor total no estoque)
-//• Realizar uma entrada no estoque e mostrar novamente os dados do produto
-//• Realizar uma saída no estoque e mostrar novamente os dados do produto.
+﻿using System;
 
 namespace ExercicioEstoque
 {
@@ -20,50 +16,31 @@ namespace ExercicioEstoque
                 bool quantityParse = int.TryParse(Console.ReadLine(), out int quantity);
 
                 Product product = new(name, price, quantity);
-                Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
-                Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
+                ShowProductData(product);
 
                 bool isOn = true;
                 while (isOn)
                 {
-                    Console.WriteLine("Deseja adicionar ou remover produtos?");
-                    Console.WriteLine("1 - Adicionar");
-                    Console.WriteLine("2 - Remover");
-                    Console.WriteLine("0 - Sair");
-                    bool optionParse = int.TryParse(Console.ReadLine(), out int option);
+                    int option = ShowMenu();
 
-                    if (!optionParse || option < 0 || option > 2)
+                    switch (option)
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        int quant = 0;
-                        if (option == 0)
-                        {
+                        case 1:
+                            UpdateInventory(product, true);
+                            break;
+                        case 2:
+                            UpdateInventory(product, false);
+                            break;
+                        case 0:
                             isOn = false;
                             break;
-                        }
-                        else if (option == 1)
-                        {
-
-                            Console.WriteLine($"Digite a quantidade a adicionar");
-                            bool quantParse = int.TryParse(Console.ReadLine(), out quant);
-                            product.AdicionarAoEstoque(quant);
-                        }
-                        else if (option == 2)
-                        {
-                            Console.WriteLine($"Digite a quantidade a remover");
-                            bool quantParse = int.TryParse(Console.ReadLine(), out quant);
-                            product.RemoverDoEstoque(quant);
-                        }
-
-                        Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
-                        Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
+                        default:
+                            Console.WriteLine("Opção inválida. Tente novamente.");
+                            break;
                     }
 
+                    ShowProductData(product);
                 }
-
             }
             catch (Exception error)
             {
@@ -72,6 +49,40 @@ namespace ExercicioEstoque
             finally
             {
                 Console.ReadKey();
+            }
+        }
+
+        static void ShowProductData(Product product)
+        {
+            Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
+            Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
+        }
+
+        static int ShowMenu()
+        {
+            Console.WriteLine("Deseja adicionar ou remover produtos?");
+            Console.WriteLine($"1 - Adicionar");
+            Console.WriteLine($"2 - Remover");
+            Console.WriteLine($"0 - Sair");
+
+            if (int.TryParse(Console.ReadLine(), out int option) && option >= 0 && option <= 2)
+                return option;
+            return -1; 
+        }
+
+        static void UpdateInventory(Product product, bool isSum)
+        {
+            Console.WriteLine($"Digite a quantidade a {(isSum ? "adicionar" : "remover")}");
+            if (int.TryParse(Console.ReadLine(), out int quant))
+            {
+                if (isSum)
+                    product.AdicionarAoEstoque(quant);
+                else
+                    product.RemoverDoEstoque(quant);
+            }
+            else
+            {
+                Console.WriteLine("Quantidade inválida.");
             }
         }
     }
