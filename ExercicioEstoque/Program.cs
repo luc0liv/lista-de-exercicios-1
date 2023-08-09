@@ -44,9 +44,11 @@ namespace ExercicioEstoque
                 Console.WriteLine($"Nome: {product.name}, Preço: {product.price}, Quantidade em estoque: {product.quantity}");
                 Console.WriteLine($"Valor total em estoque: {product.ValorTotalEmEstoque()}");
 
-            } catch (Exception error) {
+            } catch (Exception error) 
+            {
                 Console.WriteLine(error.Message);
-            } finally
+            } 
+            finally
             {
                 Console.ReadKey();
             }
